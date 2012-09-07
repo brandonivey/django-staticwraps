@@ -49,8 +49,12 @@ def render_content(request, url_path):
         raise Http404("Blog does not exist: %s" % url_path)
 
     with open(file_path, 'r') as html_file:
-        ## Let BS do a little html cleanup for us
-        static_content = BeautifulSoup(html_file.read())
+        html = html_file.read()
+
+        ## BS can't handle the echo ssi tag
+        html = re.sub('\<\!--#echo var=".*?"--\>', str(staticwrap.originating_site.domain.split('.')[-2:-1][0]), html)
+
+        static_content = BeautifulSoup(html)
 
         ## Remove some elements that we don't need or want
         if static_content.head != None:
@@ -61,14 +65,7 @@ def render_content(request, url_path):
             script = static_content.script
             script.extract()
 
-        # broken html cleanup hack
-        buttons = static_content.findAll(type="button", value="Report abuse")
-        [button.extract() for button in buttons]
-
         clean_content = static_content.prettify()
-
-        # broken html cleanup hack
-        clean_content = re.sub('\'\)\" style=\"float:right;\" \/\>', '', clean_content)
 
         context = {
             "static_content": clean_content,
