@@ -52,7 +52,7 @@ def render_content(request, url_path):
         html = html_file.read()
 
         ## BS can't handle the echo ssi tag
-        html = re.sub('\<\!--#echo var=".*?"--\>', str(staticwrap.originating_site.domain.split('.')[-2:-1][0]), html)
+        html = re.sub('\<\!--#echo var=".*?"--\>', str(site.domain.split('.')[-2:-1][0]), html)
 
         static_content = BeautifulSoup(html)
 
@@ -94,9 +94,13 @@ def render_simple_content(request, url_path):
     if not os.path.exists(file_path):
         raise Http404("url does not exist: %s" % url_path)
 
+    site = Site.objects.get_current()
+
     with open(file_path, 'r') as in_file:
         ## Just read in the file contents and push it out dirty as it is
         static_content = in_file.read()
+
+        static_content = re.sub('\<\!--#echo var=".*?"--\>', str(site.domain.split('.')[-2:-1][0]), static_content)
 
         t = loader.get_template('staticwraps/simplewrap.html')
         c = RequestContext(request, {'static_content': static_content})
