@@ -61,10 +61,6 @@ def render_content(request, url_path):
             head = static_content.head
             head.extract()
 
-        if static_content.script != None:
-            script = static_content.script
-            script.extract()
-
         clean_content = static_content.prettify()
 
         context = {
@@ -72,6 +68,7 @@ def render_content(request, url_path):
             "staticwrap": staticwrap,
             "site": site,
             "_ad_target_object": staticwrap,
+            "wc_compatibility_mode": True,
         }
 
         c = RequestContext(request, context)
