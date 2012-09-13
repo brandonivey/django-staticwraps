@@ -61,6 +61,7 @@ class TestView(TestCase):
 
         result = render_content(self.request, 'testdata/blog')
         self.assertNotIn('<head>FOO</head>', str(result))
+        self.assertNotIn('<!--#echo var="SITENAME_GENNI"-->', str(result))
 
     def testRenderSimpleContentView(self):
         """ test staticwraps.views.render_simple_content """
