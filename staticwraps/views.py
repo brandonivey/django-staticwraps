@@ -52,7 +52,11 @@ def render_content(request, url_path):
         html = html_file.read()
 
         ## BS can't handle the echo ssi tag
-        html = re.sub('\<\!--#echo var=".*?"--\>', str(site.domain.split('.')[-2:-1][0]), html)
+        try:
+            domain = str(site.domain.split('.')[-2:-1][0])
+        except IndexError:
+            domain = "BADDOMAIN"
+        html = re.sub('\<\!--#echo var=".*?"--\>', domain, html)
 
         static_content = BeautifulSoup(html)
 
@@ -97,7 +101,11 @@ def render_simple_content(request, url_path):
         ## Just read in the file contents and push it out dirty as it is
         static_content = in_file.read()
 
-        static_content = re.sub('\<\!--#echo var=".*?"--\>', str(site.domain.split('.')[-2:-1][0]), static_content)
+        try:
+            domain = str(site.domain.split('.')[-2:-1][0])
+        except IndexError:
+            domain = "BADDOMAIN"
+        static_content = re.sub('\<\!--#echo var=".*?"--\>', domain, static_content)
 
         t = loader.get_template('staticwraps/simplewrap.html')
         c = RequestContext(request, {'static_content': static_content})
