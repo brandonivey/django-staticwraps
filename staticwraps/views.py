@@ -74,9 +74,8 @@ def render_content(request, url_path):
             "static_content": clean_content,
             "staticwrap": staticwrap,
             "site": site,
-			"_ad_target_object": staticwrap,
+            "_ad_target_object": staticwrap,
         }
-
         c = RequestContext(request, context)
         t = loader.get_template('staticwraps/staticwrap.html')
         response = HttpResponse(t.render(c))
