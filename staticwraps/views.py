@@ -74,6 +74,7 @@ def render_content(request, url_path):
             "static_content": clean_content,
             "staticwrap": staticwrap,
             "site": site,
+			"_ad_target_object": staticwrap,
         }
 
         c = RequestContext(request, context)
@@ -102,5 +103,6 @@ def render_simple_content(request, url_path):
 
         t = loader.get_template('staticwraps/simplewrap.html')
         c = RequestContext(request, {'static_content': static_content})
+
         response = HttpResponse(t.render(c), content_type="text/xml")
         return response
