@@ -1,0 +1,2 @@
+recursive-include staticwraps/templates *
+recursive-include staticwraps/tests/testdata *
