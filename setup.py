@@ -14,4 +14,6 @@ setup(
         'django-jsonfield==0.8.10',
         'BeautifulSoup==3.0.8.1',
     ],
+    include_package_data=True,
+    package_data={'staticwraps': ['tests/testdata/blog/*.*'], },
 )
